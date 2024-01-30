@@ -1,77 +1,64 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import styles from './ContactForm.module.css';
 
-class ContactForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      number: '',
-    };
-  }
+const ContactForm = ({ onAddContact }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleNameChange = event => {
-    this.setState({
-      name: event.target.value,
-    });
+  const handleNameChange = event => {
+    setName(event.target.value);
   };
 
-  handleNumberChange = event => {
-    this.setState({
-      number: event.target.value,
-    });
+  const handleNumberChange = event => {
+    setNumber(event.target.value);
   };
 
-  handleAddContact = () => {
-    if (this.state.name.trim() === '' || this.state.number.trim() === '') {
+  const handleAddContact = () => {
+    if (name.trim() === '' || number.trim() === '') {
       alert('Please enter a valid name and number.');
       return;
     }
 
-    this.props.onAddContact({
+    onAddContact({
       id: nanoid(),
-      name: this.state.name,
-      number: this.state.number,
+      name: name,
+      number: number,
     });
 
-    this.setState({
-      name: '',
-      number: '',
-    });
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    return (
-      <div className={styles.formContainer}>
-        <input
-          className={styles.inputField}
-          type="text"
-          name="name"
-          placeholder="Enter name"
-          value={this.state.name}
-          onChange={this.handleNameChange}
-        />
+  return (
+    <div className={styles.formContainer}>
+      <input
+        className={styles.inputField}
+        type="text"
+        name="name"
+        placeholder="Enter name"
+        value={name}
+        onChange={handleNameChange}
+      />
 
-        <input
-          className={styles.inputField}
-          type="tel"
-          name="number"
-          placeholder="Enter number"
-          value={this.state.number}
-          onChange={this.handleNumberChange}
-        />
+      <input
+        className={styles.inputField}
+        type="tel"
+        name="number"
+        placeholder="Enter number"
+        value={number}
+        onChange={handleNumberChange}
+      />
 
-        <button
-          className={styles.addButton}
-          type="button"
-          onClick={this.handleAddContact}
-        >
-          Add Contact
-        </button>
-      </div>
-    );
-  }
-}
+      <button
+        className={styles.addButton}
+        type="button"
+        onClick={handleAddContact}
+      >
+        Add Contact
+      </button>
+    </div>
+  );
+};
 
 export default ContactForm;
